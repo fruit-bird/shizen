@@ -1,0 +1,3 @@
+[workspace]
+members = ["shizen*"]
+resolver = "2"
