@@ -1,17 +1,19 @@
+use std::vec::IntoIter;
+
 use super::midi_message::{MidiMessage, MidiMessageBytes};
 
 #[derive(Debug, Default, PartialEq)]
 pub struct MidiBuffer {
-    pub(crate) messages: Vec<MidiMessage>,
+    pub messages: Vec<MidiMessage>,
 }
 
 impl MidiBuffer {
-    pub fn new() -> Self {
-        Self::default()
+    pub const fn new() -> Self {
+        Self { messages: vec![] }
     }
 
     pub fn add_message(&mut self, bytes: MidiMessageBytes) {
-        self.messages.push(MidiMessage::from_bytes(bytes))
+        self.messages.push(MidiMessage::from_bytes(&bytes))
     }
 
     pub fn transpose(&mut self, interval: i8) {
@@ -31,4 +33,53 @@ impl MidiBuffer {
     pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut MidiMessage> {
         self.messages.iter_mut()
     }
+
+    #[must_use]
+    #[inline]
+    pub fn len(&self) -> usize {
+        self.messages.len()
+    }
+
+    #[must_use]
+    #[inline]
+    pub fn is_empty(&self) -> bool {
+        self.messages.is_empty()
+    }
+}
+
+impl IntoIterator for MidiBuffer {
+    type Item = MidiMessage;
+    type IntoIter = IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.messages.into_iter()
+    }
+}
+
+impl<'a> From<&'a [MidiMessageBytes]> for MidiBuffer {
+    fn from(bytes_buffer: &'a [MidiMessageBytes]) -> Self {
+        let messages = bytes_buffer.iter().map(MidiMessage::from_bytes).collect();
+        Self { messages }
+    }
+}
+
+impl FromIterator<MidiMessage> for MidiBuffer {
+    fn from_iter<T: IntoIterator<Item = MidiMessage>>(iter: T) -> Self {
+        Self {
+            messages: iter.into_iter().collect(),
+        }
+    }
+}
+
+#[test]
+fn midi_buffer_collect() {
+    let midi_buffer = [
+        MidiMessage::from([0x90, 1, 10]),
+        MidiMessage::from([0x83, 1, 0]),
+        MidiMessage::from([0x95, 1, 0]),
+    ]
+    .into_iter()
+    .collect::<MidiBuffer>();
+
+    eprintln!("{:?}", midi_buffer);
 }
