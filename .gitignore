@@ -1,4 +1,9 @@
 /target
 /Cargo.lock
-CHANGELOG.md
-sources.md
+
+*.md
+!README.md
+
+host/
+plugin/
+components/
