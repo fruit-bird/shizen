@@ -39,7 +39,7 @@ impl MidiMessage {
 
     /// Returns `true` if the midi status is [`NoteOn`].
     ///
-    /// [`NoteOn`]: MidiStatus::NoteOn
+    /// [`NoteOn`]: MidiMessage::NoteOn
     #[must_use]
     pub const fn is_note_on(&self) -> bool {
         matches!(self, MidiMessage::NoteOn { .. })
@@ -47,7 +47,7 @@ impl MidiMessage {
 
     /// Returns `true` if the midi status is [`NoteOff`].
     ///
-    /// [`NoteOff`]: MidiStatus::NoteOff
+    /// [`NoteOff`]: MidiMessage::NoteOff
     #[must_use]
     pub const fn is_note_off(&self) -> bool {
         matches!(self, MidiMessage::NoteOff { .. })
@@ -55,7 +55,7 @@ impl MidiMessage {
 
     /// Returns `true` if the midi status is [`ControlChange`].
     ///
-    /// [`ControlChange`]: MidiStatus::ControlChange
+    /// [`ControlChange`]: MidiMessage::ControlChange
     #[must_use]
     pub const fn is_control_change(&self) -> bool {
         matches!(self, MidiMessage::ControlChange { .. })
