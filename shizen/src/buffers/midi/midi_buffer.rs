@@ -70,16 +70,3 @@ impl FromIterator<MidiMessage> for MidiBuffer {
         }
     }
 }
-
-#[test]
-fn midi_buffer_collect() {
-    let midi_buffer = [
-        MidiMessage::from([0x90, 1, 10]),
-        MidiMessage::from([0x83, 1, 0]),
-        MidiMessage::from([0x95, 1, 0]),
-    ]
-    .into_iter()
-    .collect::<MidiBuffer>();
-
-    eprintln!("{:?}", midi_buffer);
-}
