@@ -38,8 +38,8 @@ macro_rules! Audio {
 
     ($output:ident as $channel_type:expr) => {
         match $channel_type {
-            crate::buffers::ChannelType::Mono => AudioBuffer::new_mono($output),
-            crate::buffers::ChannelType::Stereo => AudioBuffer::new_stereo($output),
+            $crate::buffers::ChannelType::Mono => AudioBuffer::new_mono($output),
+            $crate::buffers::ChannelType::Stereo => AudioBuffer::new_stereo($output),
             // _ => unimplemented!("Whoops, this channel type has yet to be implemented"),
         }
     };
