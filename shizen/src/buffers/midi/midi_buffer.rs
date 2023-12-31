@@ -9,7 +9,9 @@ pub struct MidiBuffer {
 
 impl MidiBuffer {
     pub const fn new() -> Self {
-        Self { messages: Vec::new() }
+        Self {
+            messages: Vec::new(),
+        }
     }
 
     pub fn add_message(&mut self, bytes: MidiMessageBytes) {

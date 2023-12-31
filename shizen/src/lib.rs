@@ -30,8 +30,8 @@ mod brainstorm {
     /// many of those components to make a plugin
     ///
     /// plugin != component (update: is it???)
-    /// 
-    /// This is cool looking, but is unintuitive if the user wants to add methods or assoc fns 
+    ///
+    /// This is cool looking, but is unintuitive if the user wants to add methods or assoc fns
     /// to the struct. if they even realize this gets turned into a struct. Think about it for now
     #[allow(non_snake_case, unused)]
     // #[shizen::plugin]
