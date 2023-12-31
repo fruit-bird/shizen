@@ -4,6 +4,9 @@
 *.md
 !README.md
 
+macro*/
+plugin-ffi/
+
 host/
 plugin/
 components/
