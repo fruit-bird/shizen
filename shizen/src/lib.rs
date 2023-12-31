@@ -11,7 +11,7 @@ pub mod prelude {
     pub use errors::PluginResult;
     // pub use host::DefaultHost;
     pub use components::{common_components::*, AudioProcessor, MidiProcessor};
-    pub use plugin::{Plugin, VST3Context};
+    pub use plugin::{Plugin, VSTContext};
 }
 
 #[cfg(test)]
