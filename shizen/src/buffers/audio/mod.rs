@@ -5,23 +5,21 @@ pub use audio_buffer::{AudioBuffer, Sample};
 pub use channel_type::ChannelType;
 
 /// A macro to replace the redundant syntax of:
-/// ```
-/// # let audio_buffer = AudioBuffer::default();
-/// # let output = AudioBuffer::default();
+/// ```ignore
 /// match audio_buffer.channel_type {
 ///     ChannelType::Mono => AudioBuffer::new_mono(output),
 ///     ChannelType::Stereo => AudioBuffer::new_stereo(output),
 /// }
 /// ```
 /// with the shorter
-/// ```
+/// ```ignore
 /// Audio![output as audio_buffer.channel_type]
 /// ```
 ///
 /// This macro behaves similarly to a parameterized copy constructor for [`AudioBuffer`]
 ///
 /// # Usage
-/// ```
+/// ```ignore
 /// Audio![output as Mono];
 /// Audio![output as Stereo];
 /// Audio![output as audio_buffer.channel_type];
