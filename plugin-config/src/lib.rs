@@ -56,7 +56,8 @@ impl PluginConfig {
         // TODO: maybe have it get the version from the toml file from here?
         let json = serde_json::to_string_pretty(self)?;
 
-        let mut file = File::create("plugin.conf.json")?;
+        let config_file_name = format!("{}.conf.json", self.name);
+        let mut file = File::create(config_file_name)?;
         file.write_all(json.as_bytes())?;
 
         Ok(())
