@@ -52,7 +52,7 @@ impl PluginConfig {
     ///
     /// plugin_conf.create_config_file()?;
     /// ```
-    pub fn create_config_file(&self) -> io::Result<()> {
+    pub fn generate(&self) -> io::Result<()> {
         // TODO: maybe have it get the version from the toml file from here?
         let json = serde_json::to_string_pretty(self)?;
 
