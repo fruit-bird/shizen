@@ -6,4 +6,4 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-libloader = "0.1.4"
+vst3-sys = { version = "*", git = "https://github.com/RustAudio/vst3-sys/" }
