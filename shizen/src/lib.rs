@@ -1,4 +1,4 @@
-pub mod buffers;
+pub mod buffer;
 pub mod errors;
 pub mod plugin;
 
@@ -7,18 +7,19 @@ pub mod prelude {
 
     pub use crate::Audio;
     pub use crate::{AudioProcessor, MidiProcessor};
-    pub use buffers::{AudioBuffer, MidiBuffer};
+    pub use buffer::{AudioBuffer, AudioIterator, MidiBuffer};
     pub use errors::PluginResult;
     pub use plugin::VSTContext;
 }
 
-use crate::buffers::{AudioBuffer, MidiBuffer, MidiMessage, Sample};
+use crate::buffer::{AudioBuffer, AudioIterator, MidiBuffer, MidiMessage};
 
 // have these return structs that implements Iterator so that the traits are object safe
 // so we can chain them together using .process_with()
 pub trait AudioProcessor {
-    fn process_audio(&mut self, audio_buffer: AudioBuffer) -> impl Iterator<Item = Sample>;
+    fn process_audio(&mut self, audio_buffer: AudioIterator) -> AudioBuffer;
 }
+
 pub trait MidiProcessor {
     fn process_midi(&mut self, midi_messages: MidiBuffer) -> impl Iterator<Item = MidiMessage>;
 }
