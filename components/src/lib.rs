@@ -13,10 +13,8 @@ fn GainDelayPlugin(audio_buffer: AudioBuffer) -> PluginResult<AudioBuffer> /* ||
 
     // components should be doing fast iterations with rayon when possible
     // parallelize the processing somehow, if it even makes sense
-    let gained_audio = audio_buffer
-        .iter()
-        .process_with(&mut gain);
-        // .process_with(&mut delay);
+    let gained_audio = audio_buffer.iter().process_with(&mut gain);
+    // .process_with(&mut delay);
 
     Ok(gained_audio)
 }
