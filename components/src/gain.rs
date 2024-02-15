@@ -13,11 +13,7 @@ impl GainComponent {
 
 impl AudioProcessor for GainComponent {
     fn process_audio(&mut self, audio_buffer: AudioIterator) -> AudioBuffer {
-        let output = audio_buffer
-            .into_iter()
-            .map(|sample| sample * self.gain)
-            .collect();
-
+        let output = audio_buffer.map(|sample| sample * self.gain).collect();
         Audio![output as Stereo]
     }
 }

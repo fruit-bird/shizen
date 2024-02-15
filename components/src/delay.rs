@@ -22,7 +22,6 @@ impl DelayComponent {
 impl AudioProcessor for DelayComponent {
     fn process_audio(&mut self, audio_buffer: AudioIterator) -> AudioBuffer {
         let output = audio_buffer
-            .into_iter()
             .enumerate()
             .map(|(i, sample)| {
                 let delayed_sample = self.buffer.get(i).unwrap_or(&0.0);
