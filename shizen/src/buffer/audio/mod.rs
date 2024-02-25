@@ -1,10 +1,8 @@
 mod audio_buffer;
 mod audio_iterator;
-mod channel_type;
 
 pub use audio_buffer::{AudioBuffer, Sample};
 pub use audio_iterator::AudioIterator;
-pub use channel_type::ChannelType;
 
 /// A macro to replace the redundant syntax of:
 /// ```ignore

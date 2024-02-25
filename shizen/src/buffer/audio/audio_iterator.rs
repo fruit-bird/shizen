@@ -1,51 +1,39 @@
-use crate::AudioProcessor;
-
 use super::{AudioBuffer, Sample};
 
 #[derive(Debug)]
-pub struct AudioIterator<'a> {
-    audio_buffer: &'a AudioBuffer,
-    index: usize,
+pub struct AudioIterator<'a, const SAMPLES: usize, const CHANNELS: usize> {
+    audio_buffer: AudioBuffer<'a, SAMPLES, CHANNELS>,
+    sample: usize,
+    channel: usize,
 }
 
-impl<'a> AudioIterator<'a> {
-    pub(crate) const fn new(audio_buffer: &'a AudioBuffer) -> Self {
+impl<'a, const SAMPLES: usize, const CHANNELS: usize> AudioIterator<'a, SAMPLES, CHANNELS> {
+    pub(crate) const fn new(audio_buffer: AudioBuffer<'a, SAMPLES, CHANNELS>) -> Self {
         Self {
             audio_buffer,
-            index: 0,
+            sample: 0,
+            channel: 0,
         }
-    }
-
-    pub fn process_with(self, component: &mut dyn AudioProcessor) -> AudioBuffer {
-        component.process_audio(self)
     }
 }
 
-impl<'a> Iterator for AudioIterator<'a> {
+impl<'a, const SAMPLES: usize, const CHANNELS: usize> Iterator
+    for AudioIterator<'a, SAMPLES, CHANNELS>
+{
     type Item = &'a Sample;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let sample = self.audio_buffer.samples.get(self.index);
-        self.index += 1;
-        sample
+        todo!()
     }
 }
 
-impl<'a> IntoIterator for &'a AudioBuffer {
-    type Item = &'a Sample;
-    type IntoIter = AudioIterator<'a>;
+impl<'a, const SAMPLES: usize, const CHANNELS: usize> IntoIterator
+    for AudioBuffer<'a, SAMPLES, CHANNELS>
+{
+    type Item = Sample;
+    type IntoIter = AudioIterator<'a, SAMPLES, CHANNELS>;
 
     fn into_iter(self) -> Self::IntoIter {
         AudioIterator::new(self)
-    }
-}
-
-impl<'a> FromIterator<&'a Sample> for AudioBuffer {
-    fn from_iter<I: IntoIterator<Item = &'a Sample>>(iter: I) -> Self {
-        let samples: Vec<Sample> = iter.into_iter().cloned().collect();
-        Self {
-            samples,
-            ..Default::default()
-        }
     }
 }

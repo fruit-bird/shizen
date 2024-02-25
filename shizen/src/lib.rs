@@ -12,12 +12,15 @@ pub mod prelude {
     pub use plugin::VSTContext;
 }
 
-use crate::buffer::{AudioBuffer, AudioIterator, MidiBuffer, MidiMessage};
+use crate::buffer::{AudioIterator, MidiBuffer, MidiMessage};
 
 // have these return structs that implements Iterator so that the traits are object safe
 // so we can chain them together using .process_with()
-pub trait AudioProcessor {
-    fn process_audio(&mut self, audio_buffer: AudioIterator) -> AudioBuffer;
+pub trait AudioProcessor<'a, const SAMPLES: usize, const CHANNELS: usize> {
+    fn process_audio(
+        &mut self,
+        audio_buffer: AudioIterator<'a, SAMPLES, CHANNELS>,
+    ) -> AudioIterator<'a, SAMPLES, CHANNELS>;
 }
 
 pub trait MidiProcessor {
