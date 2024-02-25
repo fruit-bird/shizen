@@ -16,11 +16,11 @@ use crate::buffer::{AudioIterator, MidiBuffer, MidiMessage};
 
 // have these return structs that implements Iterator so that the traits are object safe
 // so we can chain them together using .process_with()
-pub trait AudioProcessor<'a, const SAMPLES: usize, const CHANNELS: usize> {
+pub trait AudioProcessor<'a, const CHANNELS: usize> {
     fn process_audio(
         &mut self,
-        audio_buffer: AudioIterator<'a, SAMPLES, CHANNELS>,
-    ) -> AudioIterator<'a, SAMPLES, CHANNELS>;
+        audio_buffer: AudioIterator<'a, CHANNELS>,
+    ) -> AudioIterator<'a, CHANNELS>;
 }
 
 pub trait MidiProcessor {

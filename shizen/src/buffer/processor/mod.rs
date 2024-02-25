@@ -4,8 +4,7 @@ pub(crate) trait Processor<I: Iterator> {
     fn process(input: I) -> I;
 }
 
-pub type AudioProcessor<'a, const SAMPLES: usize, const CHANNELS: usize> =
-    dyn Processor<AudioIterator<'a, SAMPLES, CHANNELS>>;
+pub type AudioProcessor<'a, const CHANNELS: usize> = dyn Processor<AudioIterator<'a, CHANNELS>>;
 
 pub trait ProcessWith<P>
 where
