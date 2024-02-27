@@ -15,9 +15,7 @@ mod tests {
         midi_buf.add_message([0x80, 40, 40]); // error in NoteOff message's velocity gets corrected to 0
         midi_buf.add_message([0x9E, 60, 100]);
 
-        for message in midi_buf.iter() {
-            println!("{:?}", message);
-        }
+        midi_buf.iter().for_each(|m| println!("{:?}", m));
     }
 
     #[test]
