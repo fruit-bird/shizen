@@ -5,7 +5,6 @@ pub mod plugin;
 pub mod prelude {
     use super::*;
 
-    pub use crate::Audio;
     pub use crate::{AudioProcessor, MidiProcessor};
     pub use buffer::{AudioBuffer, AudioIterator, MidiBuffer};
     pub use errors::PluginResult;
