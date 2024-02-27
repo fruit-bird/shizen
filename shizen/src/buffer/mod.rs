@@ -1,6 +1,5 @@
 mod audio;
 mod midi;
-mod processor;
 
-pub use audio::{AudioBuffer, Sample, AudioIterator};
+pub use audio::{AudioBuffer, AudioIterator, Sample};
 pub use midi::{MidiBuffer, MidiMessage, MidiMessageBytes};
