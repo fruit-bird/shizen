@@ -1,65 +1,43 @@
 //! A configuration helper crate for managing plugin metadata
 
 use serde::{Deserialize, Serialize};
-use std::{
-    fs::File,
-    io::{self, Write},
-    path::Path,
-};
+use std::{fs::File, io::Write};
 
-/// Represents the configuration for a plugin.
-#[derive(Debug, Deserialize, Serialize)]
-#[non_exhaustive]
-pub struct PluginConfig {
-    /// The name of the plugin.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Config {
+    pub info: Info,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Info {
     pub name: String,
-    /// The version of the plugin.
     pub version: String,
 }
 
-impl PluginConfig {
-    /// Creates a new `PluginConfig` instance by reading from a JSON file
+impl Config {
+    pub fn to_toml(&self) -> Result<(), Box<dyn std::error::Error>> {
+        let conf = toml::to_string(self)?;
+        File::create("plugin.conf.toml")?.write_all(conf.as_bytes())?;
+
+        Ok(())
+    }
+
+    /// Creates a new `Config` instance by reading from a TOML file
     ///
-    /// The provided JSON file should have the following structure:
-    /// ```json
-    /// {
-    ///   "name": "AwesomeDelay",
-    ///   "version": "2.1.0"
-    /// }
+    /// The provided TOML file should have the following structure:
+    /// ```toml
+    /// [info]
+    /// name = "MyPlugin"
+    /// version = "1.0"
     /// ```
     ///
     /// ## Example
     /// ```ignore
     /// # use std::path::Path;
-    /// let plugin_conf = PluginConfig::new("plugin.config.json")?;
+    /// let plugin_conf = Config::from_toml("plugin.conf.toml")?;
     /// ```
     #[inline]
-    pub fn new<P: AsRef<Path>>(config_path: P) -> io::Result<Self> {
-        let file = File::open(config_path)?;
-        let plugin_conf = serde_json::from_reader(&file)?;
-
-        Ok(plugin_conf)
-    }
-
-    /// Writes out the plugin configuration to a JSON file
-    ///
-    /// # Example
-    /// ```ignore
-    /// let plugin_conf = PluginConf {
-    ///     name: "MyPlugin".to_string(),
-    ///     version: "1.0".to_string(),
-    /// };
-    ///
-    /// plugin_conf.create_config_file()?;
-    /// ```
-    pub fn generate(&self) -> io::Result<()> {
-        // TODO: maybe have it get the version from the toml file from here?
-        let json = serde_json::to_string_pretty(self)?;
-
-        let config_file_name = format!("{}.conf.json", self.name);
-        let mut file = File::create(config_file_name)?;
-        file.write_all(json.as_bytes())?;
-
-        Ok(())
+    pub fn from_toml(toml_str: &str) -> Result<Self, toml::de::Error> {
+        toml::from_str(toml_str)
     }
 }
