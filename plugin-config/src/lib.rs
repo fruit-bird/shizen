@@ -1,7 +1,10 @@
 //! A configuration helper crate for managing plugin metadata
 
 use serde::{Deserialize, Serialize};
-use std::{fs::File, io::Write};
+use std::{
+    fs::File,
+    io::{Read, Write},
+};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -36,8 +39,12 @@ impl Config {
     /// # use std::path::Path;
     /// let plugin_conf = Config::from_toml("plugin.conf.toml")?;
     /// ```
-    #[inline]
-    pub fn from_toml(toml_str: &str) -> Result<Self, toml::de::Error> {
-        toml::from_str(toml_str)
+    pub fn from_toml(toml_path: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        let mut file = File::open(toml_path)?;
+        let mut contents = String::new();
+        file.read_to_string(&mut contents)?;
+
+        let conf = toml::from_str(toml_path)?;
+        Ok(conf)
     }
 }
