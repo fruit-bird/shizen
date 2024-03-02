@@ -1,5 +1,5 @@
 [package]
-name = "shizen_macros"
+name = "shizen-macros"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,6 +9,7 @@ edition = "2021"
 proc-macro = true
 
 [dependencies]
+derive_more = "0.99.17"
 plugin-config = { version = "0.1.0", path = "../plugin-config" }
 proc-macro2 = "1.0.70"
 quote = "1.0.33"
