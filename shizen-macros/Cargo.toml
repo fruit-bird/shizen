@@ -11,7 +11,7 @@ proc-macro = true
 [dependencies]
 derive_more = "0.99.17"
 plugin-config = { version = "0.1.0", path = "../plugin-config" }
-proc-macro2 = "1.0.70"
-quote = "1.0.33"
+proc-macro2 = "1.0.78"
+quote = "1.0.35"
 shizen = { version = "0.1.0", path = "../shizen" }
-syn = { version = "2.0.37", features = ["full", "extra-traits"] }
+syn = { version = "2.0.52", features = ["full", "extra-traits"] }
