@@ -3,6 +3,7 @@ use std::vec::IntoIter;
 use super::midi_message::MidiMessage;
 
 pub type MidiMessageBytes = [u8; 3];
+pub type _MidiEvent = (u64, MidiMessageBytes);
 
 #[derive(Debug, Default, PartialEq)]
 pub struct MidiBuffer {
@@ -17,7 +18,7 @@ impl MidiBuffer {
     }
 
     pub fn add_message(&mut self, bytes: MidiMessageBytes) {
-        self.messages.push(MidiMessage::from_bytes(&bytes))
+        self.messages.push(MidiMessage::from_bytes(bytes))
     }
 
     pub fn transpose(&mut self, interval: i8) {
@@ -60,9 +61,9 @@ impl IntoIterator for MidiBuffer {
     }
 }
 
-impl<'a> From<&'a [MidiMessageBytes]> for MidiBuffer {
-    fn from(bytes_buffer: &'a [MidiMessageBytes]) -> Self {
-        let messages = bytes_buffer.iter().map(MidiMessage::from_bytes).collect();
+impl FromIterator<MidiMessageBytes> for MidiBuffer {
+    fn from_iter<T: IntoIterator<Item = MidiMessageBytes>>(iter: T) -> Self {
+        let messages = iter.into_iter().map(MidiMessage::from_bytes).collect();
         Self { messages }
     }
 }

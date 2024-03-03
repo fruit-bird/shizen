@@ -8,7 +8,7 @@ pub enum MidiMessage {
 }
 
 impl MidiMessage {
-    pub const fn from_bytes(bytes: &[u8; 3]) -> Self {
+    pub const fn from_bytes(bytes: [u8; 3]) -> Self {
         match bytes[0] & 0xF0 {
             0x80 => Self::NoteOff {
                 note_number: bytes[1],
@@ -65,6 +65,6 @@ impl MidiMessage {
 
 impl From<[u8; 3]> for MidiMessage {
     fn from(bytes: [u8; 3]) -> Self {
-        Self::from_bytes(&bytes)
+        Self::from_bytes(bytes)
     }
 }
