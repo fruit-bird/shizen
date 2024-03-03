@@ -29,14 +29,13 @@ pub enum Args {
 impl Parse for Args {
     fn parse(input: ParseStream) -> Result<Self> {
         let lookahead = input.lookahead1();
-        if lookahead.peek(Ident) && input.peek2(Token![=]) {
-            Ok(Args::Config {
+        match input.cursor().ident() {
+            Some((id, _)) if id == "config" => Ok(Args::Config {
                 config_token: input.parse()?,
                 eq_token: input.parse()?,
                 file_name: input.parse()?,
-            })
-        } else {
-            Err(lookahead.error())
+            }),
+            _ => Err(lookahead.error()),
         }
     }
 }

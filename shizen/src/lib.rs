@@ -6,9 +6,9 @@ pub mod prelude {
     use super::*;
 
     pub use crate::{AudioProcessor, MidiProcessor};
-    pub use buffer::{AudioBuffer, AudioIterator, MidiBuffer};
-    pub use errors::PluginResult;
-    pub use plugin::VSTContext;
+    pub use buffer::*;
+    pub use errors::*;
+    pub use plugin::*;
 }
 
 use crate::buffer::{AudioIterator, MidiBuffer};
