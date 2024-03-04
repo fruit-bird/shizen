@@ -1,4 +1,3 @@
-use derive_more::From;
 use syn::{
     parse::{Parse, ParseStream},
     punctuated::Punctuated,
@@ -17,7 +16,6 @@ impl Parse for PluginArgs {
     }
 }
 
-#[derive(From)]
 pub enum Args {
     Config {
         config_token: Ident,
