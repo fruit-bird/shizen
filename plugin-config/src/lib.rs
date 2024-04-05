@@ -1,72 +1,41 @@
-//! A configuration helper crate for managing plugin metadata
+//! A configuration crate for plugin metadata
+
+mod builder;
+mod plugin_type;
+mod plugin_metadata;
 
 use serde::{Deserialize, Serialize};
 use std::{
     fs::File,
-    io::{Read, Write},
+    io::{self, Write},
 };
 
+pub use crate::builder::ShizenConfigBuilder;
+pub use crate::plugin_type::PluginType;
+pub use crate::plugin_metadata::PluginMetadata;
+
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Config {
-    pub metadata: Metadata,
+pub struct ShizenConfig {
+    /// The plugin's metadata table `[shizen]`
+    pub shizen: Metadata,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Metadata {
-    pub name: String,
-    pub version: String,
+    /// The plugin's metadata table at `[shizen.metadata]`
+    pub metadata: PluginMetadata,
 }
 
-impl Config {
-    pub fn to_toml(&self) -> Result<(), Box<dyn std::error::Error>> {
-        let conf = toml::to_string(self)?;
-        File::create("plugin.conf.toml")?.write_all(conf.as_bytes())?;
+impl ShizenConfig {
+    /// Writes the `ShizenConfig` instance to a TOML file
+    pub fn write_to_toml(&self) -> Result<(), io::Error> {
+        let conf = toml::to_string(self).map_err(|e| io::Error::other(e))?;
+        let mut cargo = File::options().append(true).open("Cargo.toml")?;
+
+        cargo.write_all(b"\n")?;
+        cargo.write_all(conf.as_bytes())?;
 
         Ok(())
     }
-
-    /// Creates a new `Config` instance by reading from a TOML file
-    ///
-    /// The provided TOML file should have the following structure:
-    /// ```toml
-    /// [metadata]
-    /// name = "MyPlugin"
-    /// version = "1.0"
-    /// ```
-    ///
-    /// ## Example
-    /// ```ignore
-    /// let plugin_conf = Config::from_toml("plugin.conf.toml")?;
-    /// println!("{:?}", plugin_conf.metadata.name); // "MyPlugin"
-    /// ```
-    pub fn from_toml(toml_path: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let mut contents = String::new();
-        File::open(toml_path)?.read_to_string(&mut contents)?;
-
-        let conf = toml::from_str(&contents)?;
-        Ok(conf)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_to_toml() {
-        let conf = Config {
-            metadata: Metadata {
-                name: "MyPlugin".to_string(),
-                version: "1.0".to_string(),
-            },
-        };
-
-        assert!(conf.to_toml().is_ok());
-    }
-
-    #[test]
-    fn test_from_toml() {
-        let conf = Config::from_toml("plugin.conf.toml");
-        assert!(conf.is_ok());
-    }
+    // maybe add a `read_from_toml` function
 }
