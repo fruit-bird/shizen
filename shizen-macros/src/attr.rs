@@ -1,4 +1,3 @@
-use plugin_config::Config;
 use proc_macro2::{Span, TokenStream};
 use quote::ToTokens;
 use syn::{Error, ItemFn, Result};
@@ -19,13 +18,12 @@ use crate::ast::*;
 /// This is, if I want to keep the functional component-like API
 ///
 /// - [ ] Now I have to understand how to FFI with the C++ VST SDK
-/// - [x] Later, add an optional arg that's like `#[shizen(config = "plugin.conf.toml")]`"
 pub fn plugin_impl(parsed_args: PluginArgs, parsed_input: ItemFn) -> Result<TokenStream> {
     let PluginArgs { args } = parsed_args;
 
     for arg in args.iter() {
         match arg {
-            Args::Config { file_name, .. } => impls::config_impl(file_name)?,
+            _ => return Err(Error::new(Span::call_site(), "no args available for now")),
         }
     }
 
@@ -39,21 +37,4 @@ pub fn plugin_impl(parsed_args: PluginArgs, parsed_input: ItemFn) -> Result<Toke
     // return Err(Error::new(Span::call_site(), format!("{:?}", file_name)));
 
     Ok(parsed_input.into_token_stream())
-}
-
-mod impls {
-    use syn::LitStr;
-
-    use super::*;
-
-    pub fn config_impl(file_name: &LitStr) -> Result<()> {
-        let file_name = file_name.value();
-        // do something with the config data
-        let _config = Config::from_toml(&file_name).map_err(comp_error)?;
-        Ok(())
-    }
-}
-
-fn comp_error(e: Box<dyn std::error::Error>) -> Error {
-    Error::new(Span::call_site(), e)
 }
