@@ -6,14 +6,13 @@ pub struct GainComponent {
 }
 
 impl GainComponent {
-    pub fn new(gain: f32) -> Self {
+    pub const fn new(gain: f32) -> Self {
         Self { gain }
     }
 }
 
-impl AudioProcessor for GainComponent {
-    fn process_audio(&mut self, audio_buffer: AudioIterator) -> AudioBuffer {
-        let output = audio_buffer.map(|sample| sample * self.gain).collect();
-        Audio![output as Stereo]
+impl<const CH: usize> AudioProcessor<CH> for GainComponent {
+    fn process_samples(&self, samples: [Sample; CH]) -> [f32; CH] {
+        samples.map(|s| s * self.gain)
     }
 }
