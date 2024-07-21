@@ -1,31 +1,44 @@
-use derive_more::{From, Into};
-
-use super::AudioIterator;
-
 pub type Sample = f32;
-pub type MonoBuffer<'a> = AudioBuffer<'a, 1>;
-pub type StereoBuffer<'a> = AudioBuffer<'a, 2>;
+pub type MonoBuffer = AudioBuffer<1>;
+pub type StereoBuffer = AudioBuffer<2>;
 
-#[derive(Debug, PartialEq, Clone, Copy, From, Into)]
-pub struct AudioBuffer<'a, const CHANNELS: usize> {
-    pub(crate) samples: [&'a [Sample]; CHANNELS],
+#[derive(Debug, PartialEq, Clone)]
+pub struct AudioBuffer<const CH: usize> {
+    pub(crate) samples: Vec<[Sample; CH]>,
+    pub sample_rate: u32,
 }
 
-impl<'a, const CHANNELS: usize> AudioBuffer<'a, CHANNELS> {
-    pub const fn new(samples: [&'a [Sample]; CHANNELS]) -> Self {
-        assert!(CHANNELS != 0, "CHANNELS must be non-zero");
-        Self { samples }
+// in case we don't need the sample_rate here, will expose all Vec methods,
+// but will lose option to add methods and impls.
+type _AudioBuffer<const CH: usize> = Vec<[Sample; CH]>;
+
+impl<const CH: usize> AudioBuffer<CH> {
+    pub const fn new(samples: Vec<[Sample; CH]>, sample_rate: u32) -> Self {
+        assert!(CH != 0, "Number of channels must be non-zero");
+        Self {
+            samples,
+            sample_rate,
+        }
     }
 
-    #[inline]
-    #[must_use]
-    pub const fn iter(&self) -> AudioIterator<'a, CHANNELS> {
-        AudioIterator::new(*self)
-    }
-
-    #[inline]
-    #[must_use]
-    pub const fn len(&self) -> usize {
-        self.samples[0].len()
+    pub const fn new_empty(sample_rate: u32) -> Self {
+        Self {
+            samples: Vec::new(),
+            sample_rate,
+        }
     }
 }
+
+impl<const CH: usize> Iterator for AudioBuffer<CH> {
+    type Item = [Sample; CH];
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.samples.pop()
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (self.samples.len(), Some(self.samples.len()))
+    }
+}
+
+impl<const CH: usize> ExactSizeIterator for AudioBuffer<CH> {}
