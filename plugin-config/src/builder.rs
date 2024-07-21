@@ -23,8 +23,8 @@ impl ShizenConfigBuilder {
         }
     }
 
-    pub fn categories(mut self, categories: &[&str]) -> Self {
-        self.categories = Some(categories.to_vec().iter().map(|s| s.to_string()).collect());
+    pub fn categories(mut self, categories: Vec<&str>) -> Self {
+        self.categories = Some(categories.iter().map(|s| s.to_string()).collect());
         self
     }
 
