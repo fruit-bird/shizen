@@ -2,17 +2,13 @@ use shizen::prelude::*;
 
 #[test]
 fn audio_iterator() {
-    let mut buffer = StereoBuffer::new(vec![[0.0, 0.0]; 10], 44_100)
+    let audio_buffer = MonoBuffer::from(vec![[0.0]; 10]);
+    let buffer = audio_buffer
+        .iter()
         .enumerate()
-        .map(|(i, [l, r])| match i % 2 == 0 {
-            true => [l + 1.0, r + 1.0],
-            false => [l - 1.0, r - 1.0],
-        })
-        .collect_audio(44_100);
+        .map(|(i, [s])| [s + i as Sample])
+        .collect::<MonoBuffer>();
 
-    dbg!(&buffer);
+    eprintln!("{:?}", buffer);
     assert_eq!(buffer.len(), 10);
-
-    buffer.next();
-    assert_eq!(buffer.len(), 9);
 }
