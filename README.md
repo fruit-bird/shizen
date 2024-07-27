@@ -35,9 +35,7 @@ public:
 ```rust
 #[shizen]
 pub fn SwapPlugin(audio_buffer: StereoBuffer) -> StereoBuffer {
-    audio_buffer
-        .map(|[l, r]| [r, l])
-        .collect_audio(44_100)
+    audio_buffer.iter().map(|[l, r]| [r, l]).collect()
 }
 ```
 The beauty in the SHIZEN implementation is that we inject the stereo buffer directly into the function, without having to worry about handling the number of channels or the length of the buffer. SHIZEN makes it so that you can apply this swap effect to only stereo audio
