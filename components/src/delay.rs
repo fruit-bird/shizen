@@ -20,7 +20,7 @@ impl DelayComponent {
 }
 
 impl<const CH: usize> AudioProcessor<CH> for DelayComponent {
-    fn process_samples(&self, samples: [Sample; CH]) -> [Sample; CH] {
+    fn process_samples(&self, samples: &[Sample; CH]) -> [Sample; CH] {
         let mut delay_buffer = VecDeque::new();
         samples.map(|s| {
             delay_buffer.push_back(s);

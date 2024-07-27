@@ -12,7 +12,7 @@ impl GainComponent {
 }
 
 impl<const CH: usize> AudioProcessor<CH> for GainComponent {
-    fn process_samples(&self, samples: [Sample; CH]) -> [f32; CH] {
+    fn process_samples(&self, samples: &[Sample; CH]) -> [f32; CH] {
         samples.map(|s| s * self.gain)
     }
 }
