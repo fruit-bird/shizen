@@ -1,44 +1,96 @@
+use std::ops::Deref;
+
 pub type Sample = f32;
 pub type MonoBuffer = AudioBuffer<1>;
 pub type StereoBuffer = AudioBuffer<2>;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, Default, Clone, PartialEq, PartialOrd)]
 pub struct AudioBuffer<const CH: usize> {
     pub(crate) samples: Vec<[Sample; CH]>,
-    pub sample_rate: u32,
 }
 
-// in case we don't need the sample_rate here, will expose all Vec methods,
-// but will lose option to add methods and impls.
-type _AudioBuffer<const CH: usize> = Vec<[Sample; CH]>;
+impl<const CH: usize> From<Vec<[Sample; CH]>> for AudioBuffer<CH> {
+    /// Creates a new audio buffer from a vector of samples
+    ///
+    /// Use this as a constructor for AudioBuffer, and use [`AudioBuffer::new()`] to create an empty buffer
+    ///
+    /// # Panics
+    /// Panics if the number of channels is zero
+    fn from(samples: Vec<[Sample; CH]>) -> Self {
+        assert!(CH != 0, "Number of channels must be non-zero");
+        Self { samples }
+    }
+}
+
+// This will expose all the methods of Vec<_> to AudioBuffer<CH>
+impl<const CH: usize> Deref for AudioBuffer<CH> {
+    type Target = Vec<[Sample; CH]>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.samples
+    }
+}
 
 impl<const CH: usize> AudioBuffer<CH> {
-    pub const fn new(samples: Vec<[Sample; CH]>, sample_rate: u32) -> Self {
+    /// Creates a new empty audio buffer
+    /// # Example
+    /// ```
+    /// # use shizen::prelude::*;
+    /// let buffer = StereoBuffer::new();
+    /// assert_eq!(buffer.len(), 0);
+    /// ```
+    ///
+    /// # Panics
+    /// Panics if the number of channels is zero
+    /// ```should_panic
+    /// # use shizen::prelude::*;
+    /// let buffer = AudioBuffer::<0>::new();
+    /// ```
+    pub const fn new() -> Self {
         assert!(CH != 0, "Number of channels must be non-zero");
         Self {
-            samples,
-            sample_rate,
-        }
-    }
-
-    pub const fn new_empty(sample_rate: u32) -> Self {
-        Self {
             samples: Vec::new(),
-            sample_rate,
+        }
+    }
+
+    /// Returns an iterator over the samples in a specific channel within the buffer
+    /// # Example
+    /// ```
+    /// # use shizen::prelude::*;
+    /// let buffer = StereoBuffer::from(vec![[0.0, 1.0]; 10]);
+    /// let channel = buffer.channel(0).collect::<Vec<_>>();
+    ///
+    /// assert_eq!(channel, vec![&0.0; 10]);
+    /// ```
+    ///
+    /// # Panics
+    /// Panics if the channel index is out of bounds
+    /// ```should_panic
+    /// # use shizen::prelude::*;
+    /// let buffer = StereoBuffer::from(vec![[0.0, 1.0]; 10]);
+    /// let panics_here = buffer.channel(10).collect::<Vec<_>>();
+    /// ```
+    pub fn channel(&self, channel: usize) -> impl Iterator<Item = &Sample> {
+        assert!(channel < CH, "Channel index out of bounds");
+        self.samples.iter().map(move |s| &s[channel])
+    }
+}
+
+impl<const CH: usize> FromIterator<[Sample; CH]> for AudioBuffer<CH> {
+    fn from_iter<T: IntoIterator<Item = [Sample; CH]>>(iter: T) -> Self {
+        Self {
+            samples: iter.into_iter().collect(),
         }
     }
 }
 
-impl<const CH: usize> Iterator for AudioBuffer<CH> {
-    type Item = [Sample; CH];
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.samples.pop()
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        (self.samples.len(), Some(self.samples.len()))
+impl<'a, const CH: usize> FromIterator<[&'a Sample; CH]> for AudioBuffer<CH> {
+    fn from_iter<T: IntoIterator<Item = [&'a Sample; CH]>>(iter: T) -> Self {
+        Self {
+            samples: iter
+                .into_iter()
+                .map(|samples| samples.map(|&s| s))
+                .collect(),
+        }
     }
 }
-
-impl<const CH: usize> ExactSizeIterator for AudioBuffer<CH> {}
