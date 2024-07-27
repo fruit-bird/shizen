@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::ops::{Deref, DerefMut};
 
 pub type Sample = f32;
 pub type MonoBuffer = AudioBuffer<1>;
@@ -28,6 +28,12 @@ impl<const CH: usize> Deref for AudioBuffer<CH> {
 
     fn deref(&self) -> &Self::Target {
         &self.samples
+    }
+}
+
+impl<const CH: usize> DerefMut for AudioBuffer<CH> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.samples
     }
 }
 
