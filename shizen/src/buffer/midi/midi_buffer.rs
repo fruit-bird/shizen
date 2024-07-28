@@ -1,13 +1,27 @@
-use std::vec::IntoIter;
+use std::ops::{Deref, DerefMut};
 
 use super::midi_message::MidiMessage;
 
 pub type MidiMessageBytes = [u8; 3];
 pub type _MidiEvent = (u64, MidiMessageBytes);
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Clone, PartialEq, PartialOrd, Hash)]
 pub struct MidiBuffer {
-    pub messages: Vec<MidiMessage>,
+    pub(crate) messages: Vec<MidiMessage>,
+}
+
+impl Deref for MidiBuffer {
+    type Target = Vec<MidiMessage>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.messages
+    }
+}
+
+impl DerefMut for MidiBuffer {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.messages
+    }
 }
 
 impl MidiBuffer {
@@ -17,54 +31,16 @@ impl MidiBuffer {
         }
     }
 
-    pub fn add_message(&mut self, bytes: MidiMessageBytes) {
-        self.messages.push(MidiMessage::from_bytes(bytes))
-    }
-
     pub fn transpose(&mut self, interval: i8) {
-        for message in self.messages.iter_mut() {
-            if let MidiMessage::NoteOn { note_number, .. } = message {
-                let original_note = *note_number as i8;
-                let new_note = (original_note + interval).clamp(0, 127) as u8;
-                *note_number = new_note;
-            }
-        }
-    }
-
-    pub fn iter(&self) -> impl Iterator<Item = &MidiMessage> {
-        self.messages.iter()
-    }
-
-    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut MidiMessage> {
-        self.messages.iter_mut()
-    }
-
-    #[must_use]
-    #[inline]
-    pub fn len(&self) -> usize {
-        self.messages.len()
-    }
-
-    #[must_use]
-    #[inline]
-    pub fn is_empty(&self) -> bool {
-        self.messages.is_empty()
-    }
-}
-
-impl IntoIterator for MidiBuffer {
-    type Item = MidiMessage;
-    type IntoIter = IntoIter<Self::Item>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        self.messages.into_iter()
+        self.messages.iter_mut().for_each(|m| m.transpose(interval));
     }
 }
 
 impl FromIterator<MidiMessageBytes> for MidiBuffer {
     fn from_iter<T: IntoIterator<Item = MidiMessageBytes>>(iter: T) -> Self {
-        let messages = iter.into_iter().map(MidiMessage::from_bytes).collect();
-        Self { messages }
+        Self {
+            messages: iter.into_iter().map(MidiMessage::from_bytes).collect(),
+        }
     }
 }
 
