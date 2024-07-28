@@ -1,7 +1,7 @@
 use shizen::prelude::*;
 
 #[test]
-fn audio_iterator() {
+fn audio_buffer_collect() {
     let audio_buffer = MonoBuffer::from(vec![[0.0]; 10]);
     let buffer = audio_buffer
         .iter()
@@ -9,6 +9,5 @@ fn audio_iterator() {
         .map(|(i, [s])| [s + i as Sample])
         .collect::<MonoBuffer>();
 
-    eprintln!("{:?}", buffer);
     assert_eq!(buffer.len(), 10);
 }
