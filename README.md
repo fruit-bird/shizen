@@ -1,4 +1,4 @@
-# SHIZEN
+# SHIZEN [WIP, unreleased, experimental]
 Shizen is a project that aims to create a simple and easy way to create VST plugins. The goal is to make it easy to create VST plugins without having to navigate through the complexities
 
 ## Comparison
@@ -12,7 +12,7 @@ public:
 
     void processBlock(
         AudioBuffer<float>& buffer,
-        MidiBuffer&
+        MidiBuffer& midiMessages
     ) override {
         const int numChannels = buffer.getNumChannels();
         const int numSamples = buffer.getNumSamples();
@@ -40,9 +40,14 @@ pub fn SwapPlugin(audio_buffer: StereoBuffer) -> StereoBuffer {
 ```
 The beauty in the SHIZEN implementation is that we inject the stereo buffer directly into the function, without having to worry about handling the number of channels or the length of the buffer. SHIZEN makes it so that you can apply this swap effect to only stereo audio
 
+## Contributing
+If you're interested in contributing to this project, feel free to reach out to me. I'm always looking for help and feedback
+
+Currently, the project is in a very early stage, so there's a lot of work to be done. If you're interested in helping out, here are some things that need to be done:
+- [ ] Interop with VST3 SDK
+- [ ] ...
+
 ## What is This?
 This project stemmed from my friend [JUKE YOU](https://soundcloud.com/jukeyou) giving me the idea of a VST plugin that would achieve a certain effect that is otherwise a hassle to create manually. I thought it was a great idea and decided to make it a reality
 
 Unfortunately, the industry standard for making VSTs, [JUCE](https://juce.com), is in C++ (the devil's tongue). So, I decided to make my own framework that would make it easier to create VSTs. Obviously, nothing against JUCE, most of what I'm doing is inspired by their work and choices. I just wanted to make something that was more in line with my preferences
-
-# THIS IS A WIP!!
