@@ -14,9 +14,9 @@ license.workspace = true
 proc-macro = true
 
 [dependencies]
-shizen-config = { version = "*", path = "../shizen-config" }
 proc-macro2 = "1.0.86"
 quote = "1.0.36"
-shizen-buffers = { version = "*", path = "../shizen-buffers" }
+shizen-config = { version = "0.1.0", path = "../shizen-config" }
+shizen-buffers = { version = "0.1.0", path = "../shizen-buffers" }
 syn = { version = "2.0.72", features = ["full", "extra-traits"] }
 vst3-sys = { version = "*", git = "https://github.com/RustAudio/vst3-sys/" }
