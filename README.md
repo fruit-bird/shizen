@@ -33,7 +33,7 @@ public:
 
 ### SHIZEN Implementation
 ```rust
-#[shizen]
+#[shizen::plugin]
 pub fn SwapPlugin(audio_buffer: StereoBuffer) -> StereoBuffer {
     audio_buffer.iter().map(|[l, r]| [r, l]).collect()
 }
@@ -44,8 +44,8 @@ The beauty in the SHIZEN implementation is that we inject the stereo buffer dire
 If you're interested in contributing to this project, feel free to reach out to me. I'm always looking for help and feedback
 
 Currently, the project is in a very early stage, so there's a lot of work to be done. If you're interested in helping out, here are some things that need to be done:
-- [ ] Interop with VST3 SDK
-- [ ] ...
+- Interop with VST3 SDK
+- ...
 
 ## What is This?
 This project stemmed from my friend [JUKE YOU](https://soundcloud.com/jukeyou) giving me the idea of a VST plugin that would achieve a certain effect that is otherwise a hassle to create manually. I thought it was a great idea and decided to make it a reality
