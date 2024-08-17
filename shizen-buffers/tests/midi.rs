@@ -1,4 +1,4 @@
-use shizen::buffer::{MidiBuffer, MidiMessage};
+use shizen_buffers::prelude::*;
 
 #[test]
 fn iter_midi() {
@@ -18,6 +18,9 @@ fn midi_buffer_collect() {
     let midi_buffer = [[0x90, 1, 10]].into_iter().collect::<MidiBuffer>();
     assert_eq!(
         midi_buffer[0],
-        MidiMessage::NoteOn { note_number: 1, velocity: 10 },
+        MidiMessage::NoteOn {
+            note_number: 1,
+            velocity: 10
+        },
     );
 }

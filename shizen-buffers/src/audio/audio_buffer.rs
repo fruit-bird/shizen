@@ -22,21 +22,6 @@ impl<const CH: usize> From<Vec<[Sample; CH]>> for AudioBuffer<CH> {
     }
 }
 
-// This will expose all the methods of Vec<_> to AudioBuffer<CH>
-impl<const CH: usize> Deref for AudioBuffer<CH> {
-    type Target = Vec<[Sample; CH]>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.samples
-    }
-}
-
-impl<const CH: usize> DerefMut for AudioBuffer<CH> {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.samples
-    }
-}
-
 impl<const CH: usize> AudioBuffer<CH> {
     /// Creates a new empty audio buffer
     /// # Example
@@ -76,9 +61,23 @@ impl<const CH: usize> AudioBuffer<CH> {
     /// let buffer = StereoBuffer::from(vec![[0.0, 1.0]; 10]);
     /// let panics_here = buffer.channel(10).collect::<Vec<_>>();
     /// ```
-    pub fn channel(&self, channel: usize) -> impl Iterator<Item = &Sample> {
+    pub fn iter_channels(&self, channel: usize) -> impl Iterator<Item = &Sample> {
         assert!(channel < CH, "Channel index out of bounds");
         self.samples.iter().map(move |s| &s[channel])
+    }
+}
+
+impl<const CH: usize> Deref for AudioBuffer<CH> {
+    type Target = Vec<[Sample; CH]>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.samples
+    }
+}
+
+impl<const CH: usize> DerefMut for AudioBuffer<CH> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.samples
     }
 }
 
@@ -100,3 +99,7 @@ impl<'a, const CH: usize> FromIterator<[&'a Sample; CH]> for AudioBuffer<CH> {
         }
     }
 }
+
+impl<const CH: usize> crate::Buffer for AudioBuffer<CH> {}
+
+impl<I, const CH: usize> crate::Buffer for I where I: Iterator<Item = [Sample; CH]> {}

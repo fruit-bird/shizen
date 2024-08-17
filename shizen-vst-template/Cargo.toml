@@ -1,0 +1,16 @@
+[package]
+name = "shizen-vst-template"
+version.workspace = true
+edition.workspace = true
+description.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+shizen-buffers = { version = "*", path = "../shizen-buffers" }
+shizen-macros = { version = "*", path = "../shizen-macros" }
