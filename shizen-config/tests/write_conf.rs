@@ -1,4 +1,4 @@
-use plugin_config::{PluginType, ShizenConfigBuilder};
+use shizen_config::{PluginType, ShizenConfigBuilder};
 
 #[test]
 fn write_to_toml_test() {

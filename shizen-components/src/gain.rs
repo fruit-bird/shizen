@@ -1,4 +1,4 @@
-use shizen::prelude::*;
+use shizen_buffers::prelude::*;
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, PartialOrd)]
 pub struct GainComponent {

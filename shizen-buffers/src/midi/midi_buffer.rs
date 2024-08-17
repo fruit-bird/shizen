@@ -51,3 +51,6 @@ impl FromIterator<MidiMessage> for MidiBuffer {
         }
     }
 }
+
+impl crate::Buffer for MidiBuffer {}
+// impl<I> Buffer for I where I: Iterator<Item = MidiMessage> {}

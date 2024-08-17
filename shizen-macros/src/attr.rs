@@ -1,20 +1,42 @@
-use proc_macro2::{Span, TokenStream};
+use proc_macro2::TokenStream;
 use quote::quote;
-use syn::{Error, ItemFn, Result};
+use syn::{ItemFn, Result};
 
 use crate::ast::*;
+use crate::bindings;
+use crate::utils::*;
 
-pub fn plugin_impl(parsed_args: PluginArgs, parsed_input: ItemFn) -> Result<TokenStream> {
-    let PluginArgs { args } = parsed_args;
-    for arg in args.iter() {
-        match arg {
-            _ => return Err(Error::new(Span::call_site(), "Invalid argument")),
-        }
-    }
+pub fn plugin_impl(_parsed_args: PluginArgs, parsed_input: ItemFn) -> Result<TokenStream> {
+    let ItemFn {
+        vis,
+        sig,
+        block,
+        attrs,
+    } = &parsed_input;
 
-    // return Err(Error::new(Span::call_site(), format!("{:?}", )));
+    validate_sig_len(&sig)?;
+
+    let plugin_name = &sig.ident;
+    let (input_ident, input_ty, output_ty) = extract_types_from_sig(&sig)?;
+
+    let _bindings = bindings::generate_bindings(&parsed_input)?;
+
     Ok(quote! {
-        #[allow(non_snake_case)]
-        #parsed_input
+        #(#attrs)*
+        #vis struct #plugin_name;
+
+        // maybe turn this into a func that takes both audio and midi buffers
+        // and remove the associated types
+        //
+        // and then ill have to parse the function body to see
+        // if it uses midi or audio or both
+        impl shizen_buffers::prelude::Plugin for #plugin_name {
+            type InputBuffer = #input_ty;
+            type OutputBuffer = #output_ty;
+
+            fn process(#input_ident: #input_ty) -> #output_ty {
+                #block
+            }
+        }
     })
 }

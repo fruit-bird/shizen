@@ -1,12 +1,15 @@
 [workspace]
-members = ["shizen*/", "plugin-config/", "components/"]
+members = ["shizen-*"]
 resolver = "2"
 
 [workspace.package]
+name = "shizen"
 version = "0.1.0"
 edition = "2021"
 description = "A better way to create VSTs."
 repository = "https://github.com/fruit-bird/shizen"
-keywords = ["vst"]
-categories = ["audio-processing"]
+documentation = "https://docs.rs/shizen"
+keywords = ["vst", "audio-processing"]
+categories = ["api-bindings", "multimedia::audio"]
 license = "MIT OR Apache-2.0"
+readme = "README.md"

@@ -1,5 +1,5 @@
 [package]
-name = "shizen-macros"
+name = "shizen-components"
 version.workspace = true
 edition.workspace = true
 description.workspace = true
@@ -10,13 +10,10 @@ license.workspace = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[lib]
-proc-macro = true
-
 [dependencies]
-shizen-config = { version = "*", path = "../shizen-config" }
-proc-macro2 = "1.0.86"
-quote = "1.0.36"
 shizen-buffers = { version = "*", path = "../shizen-buffers" }
-syn = { version = "2.0.72", features = ["full", "extra-traits"] }
-vst3-sys = { version = "*", git = "https://github.com/RustAudio/vst3-sys/" }
+shizen-macros = { version = "*", path = "../shizen-macros" }
+
+[dev-dependencies]
+rand = "0.8.5"
+rayon = "1.10.0"

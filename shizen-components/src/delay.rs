@@ -1,6 +1,5 @@
+use shizen_buffers::prelude::*;
 use std::collections::VecDeque;
-
-use shizen::prelude::*;
 
 #[derive(Debug, Default, Clone, PartialEq, PartialOrd)]
 pub struct DelayComponent {
