@@ -11,10 +11,10 @@ license.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serde = { version = "1.0.204", features = ["derive"] }
-toml = "0.8.15"
+config = { version = "0.14.0", features = ["toml"] }
+serde = { version = "1.0.204", defult-features = false, features = ["derive"] }
 
 [shizen.metadata]
-categories = ["Effect", "Utility", "MIDI"]
 vendor = "Shizen Technologies"
-plugin_type = "effect"
+categories = ["effect", "utility", "midi"]
+plugin-type = "instrument"

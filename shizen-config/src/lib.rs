@@ -1,23 +1,35 @@
-//! A configuration crate for plugin metadata
+//! A configuration crate for VST metadata
+//!
+//! The information configured in the `shizen` table of `Cargo.toml` manifest
+//! is used to populate the necessary information about a VST
+//!
+//! # Usage
+//! ```toml
+//! [shizen.metadata]
+//! vendor = "Shizen Technologies"
+//! categories = ["utility", "midi"]
+//! plugin-type = "instrument"
+//! ```
 
-mod builder;
-mod plugin_metadata;
-mod plugin_type;
+mod enums;
 
+use config::{Config, File, FileFormat};
 use serde::{Deserialize, Serialize};
-use std::{
-    fs::File,
-    io::{self, Read as _, Write},
-};
 
-pub use crate::builder::ShizenConfigBuilder;
-pub use crate::plugin_metadata::PluginMetadata;
-pub use crate::plugin_type::PluginType;
+pub use crate::enums::{Categories, PluginType};
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ShizenConfig {
-    /// The plugin's metadata table `[shizen]`
-    pub shizen: Metadata,
+#[derive(Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+#[non_exhaustive]
+pub struct PluginMetadata {
+    /// The `vendor` in the `[shizen.metadata]` table
+    pub vendor: String,
+
+    /// The `categories` list in the `[shizen.metadata]` table
+    pub categories: Option<Vec<Categories>>,
+
+    /// The `plugin_type` in the `[shizen.metadata]` table
+    pub plugin_type: Option<PluginType>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -26,27 +38,19 @@ pub struct Metadata {
     pub metadata: PluginMetadata,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ShizenConfig {
+    /// The plugin's metadata table `[shizen]`
+    pub shizen: Metadata,
+}
+
 impl ShizenConfig {
-    /// Writes the `ShizenConfig` instance to a TOML file
-    pub fn write_to_toml(&self) -> Result<(), io::Error> {
-        let conf = toml::to_string(self).map_err(|e| io::Error::other(e))?;
-        let mut cargo = File::options().append(true).open("Cargo.toml")?;
+    pub fn new() -> Result<Self, config::ConfigError> {
+        let conf = Config::builder()
+            .add_source(File::new("Cargo.toml", FileFormat::Toml))
+            .build()?
+            .try_deserialize()?;
 
-        // check if the config table exists
-        let mut buf = String::new();
-        cargo.read_to_string(&mut buf)?;
-
-        // so as not to write the config table multiple times
-        // but if config is different, then it doesn't work
-        if buf.contains("[shizen") {
-            todo!("diff the config tables");
-            // return Ok(());
-        }
-
-        cargo.write_all(b"\n")?;
-        cargo.write_all(conf.as_bytes())?;
-
-        Ok(())
+        Ok(conf)
     }
-    // maybe add a `read_from_toml` function
 }
