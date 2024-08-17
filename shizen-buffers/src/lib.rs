@@ -1,13 +1,5 @@
-mod audio;
-mod midi;
-
-pub mod prelude {
-    use super::*;
-
-    pub use super::Plugin;
-    pub use audio::*;
-    pub use midi::*;
-}
+pub mod audio;
+pub mod midi;
 
 /// A marker trait for [`AudioBuffer<CH>`](`audio::AudioBuffer`) and [`MidiBuffer`](`midi::MidiBuffer`).
 // I should make this private

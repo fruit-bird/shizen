@@ -1,4 +1,4 @@
-use shizen_buffers::prelude::*;
+use shizen_buffers::audio::{AudioProcessor, Sample};
 use std::collections::VecDeque;
 
 #[derive(Debug, Default, Clone, PartialEq, PartialOrd)]

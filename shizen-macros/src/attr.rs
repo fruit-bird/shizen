@@ -30,7 +30,7 @@ pub fn plugin_impl(_parsed_args: PluginArgs, parsed_input: ItemFn) -> Result<Tok
         //
         // and then ill have to parse the function body to see
         // if it uses midi or audio or both
-        impl shizen_buffers::prelude::Plugin for #plugin_name {
+        impl shizen_buffers::Plugin for #plugin_name {
             type InputBuffer = #input_ty;
             type OutputBuffer = #output_ty;
 

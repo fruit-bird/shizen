@@ -1,4 +1,4 @@
-use shizen_buffers::prelude::*;
+use shizen_buffers::audio::{AudioProcessor, Sample};
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, PartialOrd)]
 pub struct GainComponent {

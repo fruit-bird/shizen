@@ -1,4 +1,4 @@
-use shizen_buffers::prelude::*;
+use shizen_buffers::midi::{MidiBuffer, MidiMessage};
 
 #[test]
 fn iter_midi() {

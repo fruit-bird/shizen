@@ -1,4 +1,4 @@
-use shizen_buffers::prelude::*;
+use shizen_buffers::audio::StereoBuffer;
 use shizen_macros::shizen;
 
 #[shizen]

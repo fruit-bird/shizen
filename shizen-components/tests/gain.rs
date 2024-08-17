@@ -1,4 +1,7 @@
-use shizen_buffers::prelude::*;
+use shizen_buffers::{
+    audio::{AudioProcessor, StereoBuffer},
+    Plugin,
+};
 use shizen_components::GainComponent;
 use shizen_macros::shizen;
 

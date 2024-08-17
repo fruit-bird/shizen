@@ -1,4 +1,4 @@
-use shizen_buffers::prelude::*;
+use shizen_buffers::audio::{MonoBuffer, Sample};
 
 #[test]
 fn audio_buffer_collect() {

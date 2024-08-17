@@ -1,9 +1,9 @@
 [workspace]
-members = ["shizen-*"]
+members = ["shizen*"]
 resolver = "2"
 
 [workspace.package]
-name = "shizen"
+# name = "shizen"
 version = "0.1.0"
 edition = "2021"
 description = "A better way to create VSTs."

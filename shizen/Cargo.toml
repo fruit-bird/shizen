@@ -1,0 +1,17 @@
+[package]
+name = "shizen"
+version.workspace = true
+edition.workspace = true
+description.workspace = true
+repository.workspace = true
+documentation.workspace = true
+keywords.workspace = true
+categories.workspace = true
+license.workspace = true
+readme.workspace = true
+
+[dependencies]
+shizen-buffers = { version = "0.1.0", path = "../shizen-buffers" }
+shizen-components = { version = "0.1.0", path = "../shizen-components" }
+shizen-config = { version = "0.1.0", path = "../shizen-config" }
+shizen-macros = { version = "0.1.0", path = "../shizen-macros" }
