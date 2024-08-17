@@ -1,7 +1,6 @@
 use shizen_buffers::audio::StereoBuffer;
-use shizen_macros::shizen;
 
-#[shizen]
+#[shizen_macros::plugin]
 pub fn MidSideSwapPlugin(audio_buffer: StereoBuffer) -> StereoBuffer {
     audio_buffer.iter().map(|[l, r]| [r, l]).collect()
 }

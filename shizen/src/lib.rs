@@ -4,10 +4,9 @@ pub mod prelude {
         midi::{MidiBuffer, MidiProcessor},
         Plugin,
     };
-    pub use shizen_macros::shizen;
 }
 
 pub use shizen_buffers as buffers;
 pub use shizen_components as components;
 pub use shizen_config as config;
-pub use shizen_macros::shizen;
+pub use shizen_macros::plugin;

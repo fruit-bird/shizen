@@ -5,6 +5,7 @@ use syn::{
 };
 
 pub struct PluginArgs {
+    #[allow(dead_code)]
     pub args: Punctuated<Args, Token![,]>,
 }
 

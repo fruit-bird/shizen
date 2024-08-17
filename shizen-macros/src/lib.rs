@@ -7,7 +7,7 @@ use proc_macro::TokenStream;
 use syn::{parse_macro_input, Error, ItemFn};
 
 #[proc_macro_attribute]
-pub fn shizen(args: TokenStream, input: TokenStream) -> TokenStream {
+pub fn plugin(args: TokenStream, input: TokenStream) -> TokenStream {
     let parsed_args = parse_macro_input!(args as ast::PluginArgs);
     let parsed_input = parse_macro_input!(input as ItemFn);
 

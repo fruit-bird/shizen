@@ -3,9 +3,8 @@ use shizen_buffers::{
     Plugin,
 };
 use shizen_components::GainComponent;
-use shizen_macros::shizen;
 
-#[shizen]
+#[shizen_macros::plugin]
 pub fn GainPlugin(audio_buffer: StereoBuffer) -> StereoBuffer {
     let gain = GainComponent::new(50.0);
     audio_buffer
@@ -19,7 +18,7 @@ pub fn GainPlugin(audio_buffer: StereoBuffer) -> StereoBuffer {
         .collect()
 }
 
-#[shizen]
+#[shizen_macros::plugin]
 pub fn MidSideSwapPlugin(audio_buffer: StereoBuffer) -> StereoBuffer {
     audio_buffer.iter().map(|[l, r]| [r, l]).collect()
 }
