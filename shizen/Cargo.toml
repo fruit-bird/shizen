@@ -22,4 +22,4 @@ components = ["dep:shizen-components"]
 config = ["dep:shizen-config"]
 
 [dev-dependencies]
-shizen = { version = "0.1.1", path = ".", features = ["components"] }
+shizen = { path = ".", features = ["components"] }
