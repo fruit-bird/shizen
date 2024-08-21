@@ -4,7 +4,7 @@ resolver = "2"
 
 [workspace.package]
 name = "shizen"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "A better way to create VSTs."
 repository = "https://github.com/fruit-bird/shizen"
