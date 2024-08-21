@@ -26,7 +26,7 @@ impl<const CH: usize> AudioBuffer<CH> {
     /// Creates a new empty audio buffer
     /// # Example
     /// ```
-    /// # use shizen::prelude::*;
+    /// # use shizen_buffers::audio::StereoBuffer;
     /// let buffer = StereoBuffer::new();
     /// assert_eq!(buffer.len(), 0);
     /// ```
@@ -34,7 +34,7 @@ impl<const CH: usize> AudioBuffer<CH> {
     /// # Panics
     /// Panics if the number of channels is zero
     /// ```should_panic
-    /// # use shizen::prelude::*;
+    /// # use shizen_buffers::audio::AudioBuffer;
     /// let buffer = AudioBuffer::<0>::new();
     /// ```
     pub const fn new() -> Self {
@@ -47,21 +47,21 @@ impl<const CH: usize> AudioBuffer<CH> {
     /// Returns an iterator over the samples in a specific channel within the buffer
     /// # Example
     /// ```
-    /// # use shizen::prelude::*;
+    /// # use shizen_buffers::audio::StereoBuffer;
     /// let buffer = StereoBuffer::from(vec![[0.0, 1.0]; 10]);
-    /// let channel = buffer.channel(0).collect::<Vec<_>>();
+    /// let channel = buffer.iter_channel(0).collect::<Vec<_>>();
     ///
     /// assert_eq!(channel, vec![&0.0; 10]);
     /// ```
     ///
     /// # Panics
-    /// Panics if the channel index is out of bounds
+    /// Panics if the channel index is larger than the number of channels in the buffer
     /// ```should_panic
-    /// # use shizen::prelude::*;
+    /// # use shizen_buffers::audio::StereoBuffer;
     /// let buffer = StereoBuffer::from(vec![[0.0, 1.0]; 10]);
-    /// let panics_here = buffer.channel(10).collect::<Vec<_>>();
+    /// let panics_here = buffer.iter_channel(10).collect::<Vec<_>>();
     /// ```
-    pub fn iter_channels(&self, channel: usize) -> impl Iterator<Item = &Sample> {
+    pub fn iter_channel(&self, channel: usize) -> impl Iterator<Item = &Sample> {
         assert!(channel < CH, "Channel index out of bounds");
         self.samples.iter().map(move |s| &s[channel])
     }

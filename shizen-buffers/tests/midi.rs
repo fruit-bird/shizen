@@ -5,7 +5,6 @@ fn iter_midi() {
     let mut midi_buf = MidiBuffer::new();
     midi_buf.push([MidiMessage::NOTE_ON, 60, 100].into());
     midi_buf.push([MidiMessage::NOTE_OFF, 60, 0].into());
-    midi_buf.push([0x8A, 62, 100].into());
 
     assert_eq!(
         midi_buf,

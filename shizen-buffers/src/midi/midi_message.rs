@@ -47,7 +47,7 @@ impl MidiMessage {
     ///
     /// # Example
     /// ```
-    /// # use shizen::prelude::MidiMessage;
+    /// # use shizen_buffers::midi::MidiMessage;
     /// let mut note_on = MidiMessage::NoteOn { note_number: 60, velocity: 100 };
     /// note_on.transpose(-5);
     /// note_on += 10;
