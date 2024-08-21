@@ -13,9 +13,13 @@ readme.workspace = true
 [dependencies]
 shizen-buffers = { version = "0.1.0", path = "../shizen-buffers" }
 shizen-components = { version = "0.1.0", path = "../shizen-components", optional = true }
-shizen-config = { version = "0.1.0", path = "../shizen-config" }
+shizen-config = { version = "0.1.0", path = "../shizen-config", optional = true }
 shizen-macros = { version = "0.1.0", path = "../shizen-macros" }
 
 [features]
-default = ["components"]
+default = []
 components = ["dep:shizen-components"]
+config = ["dep:shizen-config"]
+
+[dev-dependencies]
+shizen = { version = "0.1.0", path = ".", features = ["components"] }
