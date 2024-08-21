@@ -1,0 +1,7 @@
+[shizen.metadata]
+vendor = "Shizen Technologies"
+categories = ["effect", "utility", "midi"]
+plugin-type = "instrument"
+
+[shizen.processing]
+block-size = 512 # Default block size

@@ -12,9 +12,4 @@ license.workspace = true
 
 [dependencies]
 config = { version = "0.14.0", features = ["toml"] }
-serde = { version = "1.0.204", defult-features = false, features = ["derive"] }
-
-[shizen.metadata]
-vendor = "Shizen Technologies"
-categories = ["effect", "utility", "midi"]
-plugin-type = "instrument"
+serde = { version = "1.0.204", default-features = false, features = ["derive"] }
