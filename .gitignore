@@ -3,8 +3,4 @@
 
 *.md
 !README.md
-
-macro*/
-plugin-ffi/
-
-host/
+!CHANGELOG.md
