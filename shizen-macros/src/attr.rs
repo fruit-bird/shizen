@@ -22,7 +22,8 @@ pub fn plugin_impl(_parsed_args: PluginArgs, parsed_input: ItemFn) -> Result<Tok
     let _bindings = bindings::generate_bindings(&parsed_input)?;
 
     Ok(quote! {
-        #(#attrs)*
+        // I'm not sure where the attributes should be. It's probably best to put them on the process method
+        // #(#attrs)*
         #vis struct #plugin_name;
 
         // maybe turn this into a func that takes both audio and midi buffers
@@ -30,10 +31,14 @@ pub fn plugin_impl(_parsed_args: PluginArgs, parsed_input: ItemFn) -> Result<Tok
         //
         // and then ill have to parse the function body to see
         // if it uses midi or audio or both
-        impl shizen_buffers::Plugin for #plugin_name {
+        // 
+        // this is weird, but because we are exporting everything in `shizen`,
+        // the path to the `Plugin` trait has to be the shizen export rather than the shizen_buffers export
+        impl shizen::buffers::Plugin for #plugin_name {
             type InputBuffer = #input_ty;
             type OutputBuffer = #output_ty;
 
+            #(#attrs)*
             fn process(#input_ident: #input_ty) -> #output_ty {
                 #block
             }
