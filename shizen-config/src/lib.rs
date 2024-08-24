@@ -77,6 +77,7 @@ pub struct PackageInfo {
     pub version: String,
     pub description: Option<String>,
     pub authors: Option<Vec<String>>,
+    pub homepage: Option<String>,
 }
 
 impl Default for PackageInfo {
@@ -93,6 +94,7 @@ impl Default for PackageInfo {
             version: env::var("CARGO_PKG_VERSION").unwrap(),
             description: env::var("CARGO_PKG_DESCRIPTION").ok(),
             authors,
+            homepage: env::var("CARGO_PKG_HOMEPAGE").ok(),
         }
     }
 }
